@@ -1,135 +1,218 @@
-# 02. Holen der Wetter-Daten
+# 04. UI, wir hübschen unsere App auf
 
-## Vorbereitung
+Quasar bietet eine Menge fertiger [Komponenten](https://quasar-framework.org/components/), die unseren Wetterdaten sofort ein aufgeräumteres Erscheinungsbild spendieren. Außerdem räumen wir alles weg, was unsere App nicht benötigt.
 
-Um das Wetter für unseren Standort zu ermitteln, schicken wir die Koordinaten zu einem kostenlosen Wetterdienst, der unsere Anfrage prompt mit einem JSON beantworetet. Darin enhalten sind die Wetterdaten der nächsten 5 Tage in 3-Stunden-Schritten, die wir aufbereitet ausgeben wollen.
+## Lass uns aufräumen!
 
-**Schritt 1**: Hole Dir einen kostenlosen API-Key bei [OpenWeatherMap](https://openweathermap.org/appid) (damit fragen wir die Wetterdaten ab)
+Ja, mich nervt die Sidebar und Top-Leiste auch. Lass uns beides weg machen, weil wir diese Komponenten mit unserer App nicht benötigen.
 
-Erfahrungsgemäß dauert die Freischaltung eines API-Keys gerne mal eine halbe Stunde, wenn nicht länger(!). Also hol' Dir den Key sofort, bevor Du weiter machst, damit Du später nicht unnötig warten musst.
-
-**Schritt 2**: Um HTTP-Requests zu machen, bedienen wir uns einer kleinen Library namens [Axios](https://github.com/axios/axios). Diese vereinheitlicht und vereinfacht unsere Arbeit. Genauso könntest Du aber auch den nativen `fetch`-Befehl von Javascript verwenden, wenn Du sicherstellen kannst, dass dieser in den [Browsern Deiner Anwender funktioniert](https://caniuse.com/#search=fetch).
-
-## Umsetzung
-
-Neben den Wetter-Daten liefert uns OpenWeatherMap netterweise auch noch die Stadt mit, in der wir uns befinden. Diese werden wir dem User auch direkt anzeigen.
-Du ahnst es sicherlich schon: Wir brauchen dazu neue Platzhalter und ein wenig Logik.
-
-Zunächst registriern wir ein Platzhalter namens `locality` im `data`-Bereich. Du kannst ihn mit `undefined`, `null`, oder einem leeren String vorbefüllen. Das Template sollte den Platzhalter auch ausgeben. Sie sieht das bei mir dann aus:
+Dazu reduziere ich radikal die Layout-Datei `layouts/MyLayout.vue` auf folgenden Inhalt:
 
 ``` html
-<q-page padding>
-  <pre>
-    Your location: {{ locality }}
-    Latitude {{ latitude }}
-    Longitude {{ longitude }}
-  </pre>
-</q-page>
+<template>
+  <q-layout>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
+</template>
 ```
 
-... und im Script-Bereich:
+Nachdem die [Quasar-Komponenten](https://quasar-framework.org/components/) nun nicht mehr gebraucht werden, können wir sie aus der `quasar.config.js` werfen. Diese Datei beherbergt sämtliche App übergreifenden Konfigurationen. Nur die hier registrierten Quasar-Komponenten werden letztendlich in die App compiliert. So hast Du es in der Hand, wie groß die Dateigröße Deiner App am Ende ist.
+
+Den Bereich `components` kannst Du mit diesem hier ersetzen:
 
 ``` javascript
-export default {
-  name: 'PageIndex',
-  data: () => ({
-    latitude: 0,
-    longitude: 0,
-    locality: undefined
-  }),
-  created () {
-    navigator.geolocation.getCurrentPosition(({coords}) => {
-      this.locality = 'No clue, yet'
-      this.latitude = coords.latitude
-      this.longitude = coords.longitude
-    })
+[
+  'QCard',
+  'QCardTitle',
+  'QCardMain',
+  'QCardMedia',
+  'QCardSeparator',
+  'QLayout',
+  'QSpinner',
+  'QPageContainer',
+  'QPage'
+]
+```
+*Perfekt!*
+
+Für den Hintergrund habe ich ein [Photo](http://dream-wallpaper.com/photography-wallpaper/hd-photography-7-wallpaper/1440x900/free-wallpaper-1.html) in den `assets`-Ordner gelegt. Der Rest geht mit [Quasar-Board-Komponenten](https://quasar-framework.org/components/). Da wären:
+1. Eine [Spinner-Komponente](https://quasar-framework.org/components/spinner.html), die so lange angezeigt wird, bis die Wetterdaten geladen wurden. Das ist besonders relevant, wenn wir später dieses Projekt als Smartphone-App kompilieren.
+2. Eine [Card-Componente](https://quasar-framework.org/components/card.html), die als Container für Bild und Text dient. Optional sind auch noch Action-Buttons konfigurierbar, aber die benötigt unsere einfache App derzeit nicht.
+
+Da wir die Geo-Koordinaten des Users nicht mehr anzeigen werden, können wir kurzerhand die Platzhalter auf einen einzigen reduzieren: **"weather"**. Unser data-Block sieht daher sehr übersichtlich aus:
+
+``` javascript
+data: () => ({
+  weather: undefined
+}),
+```
+
+## Wie blenden wir den Spinner ein, solange die App die Wetterdaten lädt?
+
+VueJS ermöglicht sogenannte conditional renderings. Man kann einem HTML-Element also ganz einfach sagen, "zeige dich nur, wenn Bedingung solange Bedingung x noch nicht eingetroffen ist". In unserem Fall ist der Platzhalter "weather" auf `undefined` gesetzt. Dadurch kann man also schreiben `<q-spinner v-if="!weather" :size="50" />`. Dabei ist das Attribut ":size" die Größe des Spinners in Pixel, wobei durch den vorangestellten Doppelpunkt der Ausdruck in den Anführungszeichen als Javascript interpretiert wird. So wird also die Zahl 50 und nicht der String "50" an den Spinner übergeben.
+Jetzt wäre es schön, wenn der Rest der Applikation erst angezeigt wird, wenn die Wetterdaten geladen sind. Quasi
+1. Spinner anzeigen
+2. Daten laden
+3. Daten wurden geladen
+4. Spinner ausblenden
+5. Card-Komponente mit den ausgefüllten Daten anzeigen
+
+Das kann ganz einfach erreicht werden, indem das nächste DOM-Element nach dem Spinner mit dem Attribut `v-else` ausgestattet wird.
+
+Im Ganzen sieht das dann in Etwa so aus:
+
+``` html
+<q-spinner v-if="!weather" :size="50" />
+<q-card v-else>
+  <p>... Wetterdaten ...</p>
+<q-card>
+```
+
+Das war ja leicht :)
+
+Eine weiter Hilfestellung bietet uns VueJS mit dem `computed`-Objekt. Diese enthält schlicht eine Liste von Funktionen. Diese Funtionen kann man in der View wiederum wie einen Platzhalter ansprechen.
+
+### Ein Beispiel
+
+``` javascript
+computed: {
+  currentDate () {
+    const ts = new Date();
+    return `${ts.getDate()}.${ts.getMonth() + 1}.${ts.getFullYear()}`;
   }
 }
 ```
-## Lass uns das Wetter holen!
 
-Jetzt ist der Zeitpunkt, zu dem Axios zum Einsatz kommt und die Wetterdaten von OpenWeatherMap besorgt. Dazu habe ich im `<script>`-Part zunächst die axios-Library importiert und zwei Konstanten definiert. Zum einen den API-Key für OpenWeatherMap, zum anderen den API-Endpunkt für unsere Wetterdaten. Axios liefert eine [Promise](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise) zurück, in der sich die Daten befinden. Den API-Key solltest Du natürlich mit Deinem ersetzen:
+In der View würde man dann das Datum folgendermaßen ausgeben:
+
+``` html
+<p>Heute ist {{ currentDate }}</p>
+```
+Dies wird oft dazu genutzt, Berechnungen zurück zu geben, sodass in der View lediglich das Ergebnis ausgegeben wird und keine Rechenoperationen nötig sein. So kann eine saubere Kapselung von Logik und Anzeige erreicht werden. Eine Besonderheit ist, dass die Werte, die `computed` zurückliefert aktualisiert werden, sobald sich einer der zur Berechnung notwendigen Operatoren ändern.
+
+### Beispiel, wie sich die View automatisch aktualisiert:
+
+``` html
+<p>Der Gesamtpreis beträgt {{ totalPrice }}€</p>
+```
+
+``` javascript
+export default {
+  data: () => ({
+    items: [
+      { price: 120 }
+    ]
+  }),
+  computed: {
+    totalPrice () {
+     return this.items.reduce((prev,elem) => prev + elem.price, 0)
+    }
+  },
+  created() {
+    setTimeout(() => {
+      this.items.push({price: 200})
+    }, 4000)
+  }
+};
+```
+Hier siehst Du zunächst den Preis von 120 Euro ausgegeben. Nach 4 Sekunden aktualisiert sich dann der Preis, weil die Einkaufsliste (`items`) um einen neuen Artikel für 200 Euro erweitert wurde.
+
+Jetzt haben wir alle Techniken und Komponenten zusammen für das Finale: Das Design der App ansprechender zu gestalten.
+
+## Das finale Design
+
+### Im `<template>`-Part findest Du folgenden Code
+
+``` html
+  <q-page class="flex flex-center">
+    <q-spinner v-if="!weather" :size="50" />
+    <q-card v-else>
+      <q-card-media>
+        <img src="~assets/background.jpg">
+        <h1 slot="overlay" class="q-pl-sm q-mb-none q-mt-none">
+          {{ weather.main.temp | round }}°C
+        </h1>
+        <q-card-title slot="overlay">
+          {{ weather.name }}
+          <span slot="subtitle">
+            {{ description }}.
+          </span>
+        </q-card-title>
+      </q-card-media>
+      <q-card-main>
+        <div class="row justify-between">
+          <div class="col">
+            <span class="q-body-1">Temperatur min:</span>
+            <span class="q-body-2">{{ weather.main.temp_min | round }}°C</span>
+          </div>
+          <div class="col">
+            <span class="q-body-1">Temperatur max:</span>
+            <span class="q-body-2">{{ weather.main.temp_max | round }}°C</span>
+          </div>
+          <div class="col">
+            <span class="q-body-1">Wind:</span>
+            <span class="q-body-2">{{ weather.wind.speed | kmh }} km/h</span>
+          </div>
+        </div>
+      </q-card-main>
+    </q-card>
+  </q-page>
+```
+
+### Im `<script>`-Part
 
 ``` javascript
 import axios from 'axios'
+import { date } from 'quasar'
 
-const openWeatherMapApiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
-const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/forecast'
+const openWeatherMapApiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather'
+const { formatDate } = date
 
 export default {
   name: 'PageIndex',
   data: () => ({
-    latitude: 0,
-    longitude: 0,
-    locality: undefined
+    weather: undefined
   }),
   created () {
     navigator.geolocation.getCurrentPosition(({coords}) => {
-      const weatherUrl = `${openWeatherMapUrl}?units=metric&lat=${coords.latitude}&lon=${coords.longitude}&appid=${openWeatherMapApiKey}`
+      const weatherUrl = `${openWeatherMapUrl}?units=metric&lat=${coords.latitude}&lon=${coords.longitude}&appid=${openWeatherMapApiKey}&lang=de`
       axios.get(weatherUrl).then(({data}) => {
-        this.locality = data.city.name
-        this.latitude = coords.latitude
-        this.longitude = coords.longitude
+        this.weather = data
       }).catch(e => {
         this.$q.notify('Leider konnte das aktuelle Wetter nicht ermittelt werden.')
         console.error(e)
       })
     })
+  },
+  computed: {
+    description () {
+      return this.weather.weather.map(weather => weather.description).join(', ')
+    }
+  },
+  filters: {
+    round: float => Math.round(float),
+    localDate: timeString => formatDate(new Date(timeString), 'DD.MMM'),
+    localTime: timeString => formatDate(new Date(timeString), 'HH:mm'),
+    kmh: metersPerSecond => Math.round(metersPerSecond / 1000 / (1 / 3600) * 100) / 100
   }
 }
 ```
+## Ach, fast vergessen .... die [VueJS-Filter](https://vuejs.org/v2/guide/filters.html)
 
-Im Fehlerfall geben wir eine unspezifische Fehlermeldung mittels [Notify](https://quasar-framework.org/components/notify.html) aus, im Erfolgsfall befüllen wir die Platzhalter.
+Sicherlich hast Du Dir bereits am Code schon die Funktion der Filter erschließen können. Ähnlich wie beim `computed`-Objekt, handelt es sich hierbei um eine Liste von Methode, die dazu dient, die View-Ausgabe zu formatieren. Sei dies das Umwandeln des Timestamps in das lokale Datumsformat oder die Umwandlung von Meter pro Sekunde in km/h.
 
-## Temperaturen ausgeben
+## Vorläufiges Fazit
 
-So sind wir dem Ziel schon zum Greifen nahe. Die zurückgeliferten Daten sind sehr umfangreich, aber auch ebenso [gut dokumentiert](https://openweathermap.org/forecast5). Im ersten Schritt geben wir einfach die Temperaturwerte aus. Dazu registrieren wir einen weitern Platzhalter, den ich in meinem Fall schlicht `weather` nenne. In diesem wird die Liste an Wetterdaten dann abgelegt, um diese in der View dann auszugeben.
+Der Code ist nicht *Clean* und entspricht nicht dem [SOLID-Prinzip](https://en.wikipedia.org/wiki/SOLID). Das bedeutet, dass die Filter zum Beispiel ausgelagert werden können, um an jeder beliebigen Stelle wiederverwendet werden zu können. Auch der Inhalt der `created()`-Methode sollte an einer anderen Stelle platziert werden. So könnte man den das Wetter-Update auch manuell antriggern, ohne die Seite neu laden zu müssen. 
 
-Also:
+Die Konfiguaration sollte auch in eine gesonderte `config`-Datei ausgelagert werden, weil Zugangsdaten zentral verwaltet werden sollten, bzw. aus Sicherheitsgründen oft von Außerhalb in die Komponente gereicht werden, sodass der Quellcode der Komponente völlig ohne solcher Daten auskommt.
 
-``` javascript
-...
-  data: () => ({
-    latitude: 0,
-    longitude: 0,
-    locality: undefined,
-    weather: []
-  }),
-  created () {
-    navigator.geolocation.getCurrentPosition(({coords}) => {
-      const weatherUrl = `${openWeatherMapUrl}?units=metric&lat=${coords.latitude}&lon=${coords.longitude}&appid=${openWeatherMapApiKey}`
-      axios.get(weatherUrl).then(({data}) => {
-        this.locality = data.city.name
-        this.latitude = coords.latitude
-        this.longitude = coords.longitude
-        this.weather = data.list
-      }).catch(e => {
-        this.$q.notify('Leider konnte das aktuelle Wetter nicht ermittelt werden.')
-        console.error(e)
-      })
-    })
-  }
-  ...
-}
-```
-und
-
-``` html
-<q-page padding>
-<pre>
-  Your location: {{ locality }}
-  Latitude {{ latitude }}
-  Longitude {{ longitude }}
-</pre>
-<h6>Temperatures</h6>
-<span v-for="item in weather" :key="item.dt">
- {{ item.main.temp }} °C
-</span>
-</q-page>
-```
 
 ## Ziel erreicht
 
-Das soll es für diesen Schritt gewesen sein. Unsere App zeigt nach dem Starten den aktuellen Standort und die Temperaturen der nächsten 5 Tage an. Schön ist die Ausgabe noch nicht, aber das gehen wir im nächsten Branch an und verwenden ein paar der Quasar-Komponenten.
+Das soll es für diesen Schritt gewesen sein. Unsere App zeigt nach dem Starten den aktuellen Standort und die Temperaturen auf einem schönen Hintergrund an. Auch die Höchst- und Tiefsttemperatur, sowie die aktuelle Windgeschwindigkeit wird ausgegeben.
 
-Herzlichen Glückwunsch! Wir sehen uns in **04-ui** wieder: `git checkout 04-ui`
+Herzlichen Glückwunsch! Wir sehen uns in **05-refreh** wieder: `git checkout 04-refresh`
