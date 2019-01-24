@@ -49,7 +49,10 @@ module.exports = function (ctx) {
         'QLayout',
         'QSpinner',
         'QPageContainer',
-        'QPage'
+        'QPage',
+        'QPullToRefresh',
+        'QIcon',
+        'QBtn'
       ],
       directives: [
         'Ripple'
