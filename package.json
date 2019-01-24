@@ -1,0 +1,10 @@
+{
+  "name": "vue-simple-app",
+  "version": "1.0.0",
+  "description": "A simple app to learn VueJs and Quasar",
+  "main": "index.js",
+  "repository": "git@gitlab.com:lilaflo/vue-quasar-simple-app.git",
+  "author": "Florian Fackler <florian.fackler@mayflower.de>",
+  "license": "MIT",
+  "private": false
+}
