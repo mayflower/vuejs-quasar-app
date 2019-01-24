@@ -215,4 +215,4 @@ Die Konfiguaration sollte auch in eine gesonderte `config`-Datei ausgelagert wer
 
 Das soll es für diesen Schritt gewesen sein. Unsere App zeigt nach dem Starten den aktuellen Standort und die Temperaturen auf einem schönen Hintergrund an. Auch die Höchst- und Tiefsttemperatur, sowie die aktuelle Windgeschwindigkeit wird ausgegeben.
 
-Herzlichen Glückwunsch! Wir sehen uns in **05-refreh** wieder: `git checkout 05-refresh`
+Herzlichen Glückwunsch! Wir sehen uns in **05-refresh** wieder: `git checkout 05-refresh`
