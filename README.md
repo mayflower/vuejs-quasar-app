@@ -1,4 +1,3 @@
 # Eine einfache Wetter-App, um VueJs und Quasar kennen zu lernen
 
-1. installiere Quasar (VueJs wird als Abhängigkeit mit installiert): `yarn global add vue-cli`
-2. 
+Wechsle zum Branch 01-setup, um mit diesem Workshop zu beginnen `git checkout 01-setup`
