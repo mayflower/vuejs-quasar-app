@@ -1,4 +1,4 @@
-# 04. Refresh - die Wetterdaten aktualisieren
+# 05. Refresh - die Wetterdaten aktualisieren
 
 Eine Kleinigkeit sollten wir noch einbauen: Eine Refresh-Möglichkeit für die App. In der Desktop-Variante zeigen wir dazu einen Refresh-Button an, in der mobilen Variante kommt eine "Pull-to-Refresh" zum Einsatz. Wenn der User also den am Screen seines Smartphones nach unten wischt, aktualisieren sich die Daten.
 
