@@ -1,31 +1,63 @@
-# Eine einfache Wetter-App, um VueJs und Quasar kennen zu lernen
+# 02. Ausgeben der Geo-Location
 
-In diesem Projekt kannst Du Schritt für Schritt eine Wetter-App mit Quasar (auf Basis von VueJS) bauen, die sowohl im Browser, als auch als App auf Deinem Smartphone (mit Hilfe von Corodva) oder als vollwärtige Desktop-App (mit Hilfe von Elektron) ausführbar ist.
+## Ersetzen des Quasar-Logos mit einer Ausgabe der Geo-Koordinaten
 
-Die Idee ist, dass wir gemeinsam ein kleines VueJS-Projekt aufsetzen und Du kann dieses Repository zum "Spicken" verwenden kannst. Dieses Repository ist aufgeteilt in Branches, die dem jeweilgen Blog-Artikeln auf Mayflower entsprechen.
+Die kopmlette App-Logik verbirgt sich im `src`-Verzeichnis. Dort finden wir unter `pages` einmal die Error404.vue page, die ausgeliefert wird, wenn unsere App versucht eine Ansicht anzuzeigen, die nicht gefunden werden kann. Danaben ist die **Index.vue** und die modifizieren wir jetzt.
 
-## Installation
-1. Installiere Quasar: `yarn global add quasar-cli`
-2. Erstelle ein leeres Quasar-Projekt, an dem wir jetzt gemeinsam arbeiten werden mit `quasar init <ORDNER_NAME>`
-3. Um diesen Branch lauffähig zu bekommen, installiere die javascript-Abhängigkeiten mit `yarn` oder `npm install`
+Wie jede VueJS-Komponente ist auch diese aufgeteilt in `<template>` (der HTML-Teil), `<script>` (der Logik-Teil) und `<style>` (dem CSS).
+Im `<template>`-Part ersetzen wir einfach das Bild durch folgenden Code:
 
-Bei mir sieht die Ausgabe dann so aus (ich habe das Projekt in einem bereits bestehenden Ordner installiert):
-
-``` bash
- Running command: vue init 'quasarframework/quasar-starter-kit' .
-
-? Generate project in current directory? Yes
-? Project name (internal usage for dev) vue-simple-app
-? Project product name (official name) Vueather
-? Project description A simple VueJS / Quasar weather app to dabble in those technologies
-? Author Florian Fackler <florian.fackler@mayflower.de>
-? Check the features needed for your project: ESLint, Axios, IE11 support
-? Pick an ESLint preset Standard
-? Cordova id (disregard if not building mobile apps) de.mayflower.vueather
-? Should we run `npm install` for you after the project has been created? (recommended) yarn
+``` html
+<q-page class="flex flex-center">
+    <pre>
+        Your current position is
+        Latitude {{ latitude }}
+        Longitude {{ longitude }}
+    </pre>
+</q-page>
 ```
 
-Jetzt bist Du bereit, ein wenig mit Deiner neuen App herum zu experimentieren, bevor wir weiter machen.
-Mit `quasar dev` (im neu erstellten Projekt-Ordner) startest Du eine Voransicht in Deinem Standard-Browser (http://localhost:8080/#/) und bei jedem Speichervorgang aktualisiert sich die Ansicht im Browser auch sofort. Wenn Du also 2 Bildschirme zur Verfügung hast, kannst Du der App beim Enstehen in Echtzeit zusehen.
+Die beiden Platzhalter "latitude" und "longitude" müssen jetzt noch im `<script>`-Part registriert werden. Dank Databinding wird die View sofort aktualisiert, sobald sich der Wert der Platzhalter ändert:
 
-Viel Spaß damit, wir sehen uns im nächsten Branch 02-output-geolocation mit `git checkout 02-output-geolocation`!
+``` javascript
+export default {
+  name: 'PageIndex',
+  data: () => ({
+    latitude: 0,
+    longitude: 0
+  })
+}
+```
+
+## Die Koordinaten dynamisch ermitteln
+
+Zugegeben, es ist noch nicht wirklich spannend, wenn unsere App 0 und 0 ausgibt. Um die Koordinaten dynamisch zu ermittlen verwenden wir einfach die native Javascript-Methode `navigator.geolocation.getCurrentPosition()`, die uns die aktuelle Position in einem Callbar zurückliefert. 
+Dem muss der Benutzer aber erst zustimmen.
+
+## Wann ermitteln wir die Position?
+
+VueJS bietet sogenannte Lifecycle Hooks. Hooks sind schlicht Funktionen, die zu einem bestimmten Zeitpunkt ausgeführt werden und "created" klingt so, als wäre es die richtige Wahl.
+
+Darum ermitteln wir die Position und die View wird automatisch aktualisiert.
+
+``` javascript
+export default {
+  name: 'PageIndex',
+  data: () => ({
+    latitude: 0,
+    longitude: 0
+  }),
+  created () {
+    navigator.geolocation.getCurrentPosition(({coords}) => {
+      this.latitude = coords.latitude
+      this.longitude = coords.longitude
+    })
+  }
+}
+```
+
+## Ziel erreicht
+
+Das soll es für diesen Schritt gewesen sein. Unsere App startet, ermittelt die Geo-Koordinaten des Browsers und gibt diese dann in der View aus.
+
+Herzlichen Glückwunsch! Wir sehen uns in **03-get-weather** wieder: `git checkout 03-get-weather`
