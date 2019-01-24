@@ -138,4 +138,6 @@ Tadaaa ... ein Button erscheint. Klickst Du ihn, werden die Daten aktualisiert. 
 
 Das soll es für diesen Schritt gewesen sein. Unsere App zeigt nach dem Starten den aktuellen Standort und die Temperaturen auf einem schönen Hintergrund an. Auch die Höchst- und Tiefsttemperatur, sowie die aktuelle Windgeschwindigkeit wird ausgegeben. Die Daten können aktualisiert werden.
 
+Im nächsten Schritt wollen wir eine richtige mobile App aus unserer kleinen Wetter-Anzeige bauen. Dazu verwendet Quasar [Apache Cordova](https://cordova.apache.org/) als Wrapper, was früher als PhoneGap bekannt war (jetzt aufgespalten in Apache Cordova und Adobe PhoneGap).
+
 Herzlichen Glückwunsch! Wir sehen uns in **06-mobile-app** wieder: `git checkout 06-mobile-app`
