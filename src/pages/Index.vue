@@ -39,11 +39,9 @@
 
 <script>
 import axios from 'axios'
-import { date } from 'quasar'
 
 const openWeatherMapApiKey = '70978937430be9d1a65977a0ba05784d'
 const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather'
-const { formatDate } = date
 
 export default {
   name: 'PageIndex',
@@ -77,8 +75,6 @@ export default {
   },
   filters: {
     round: float => Math.round(float),
-    localDate: timeString => formatDate(new Date(timeString), 'DD.MMM'),
-    localTime: timeString => formatDate(new Date(timeString), 'HH:mm'),
     kmh: metersPerSecond => Math.round(metersPerSecond / 1000 / (1 / 3600) * 100) / 100
   }
 }
