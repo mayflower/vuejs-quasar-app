@@ -1,10 +1,10 @@
 # 05. Refresh - die Wetterdaten aktualisieren
 
-Eine Kleinigkeit sollten wir noch einbauen: Eine Refresh-Möglichkeit für die App. In der Desktop-Variante zeigen wir dazu einen Refresh-Button an, in der mobilen Variante kommt eine "Pull-to-Refresh" zum Einsatz. Wenn der User also den am Screen seines Smartphones nach unten wischt, aktualisieren sich die Daten.
+Eine Kleinigkeit sollten wir noch einbauen: Eine Refresh-Möglichkeit für die App. In der Desktop-Variante zeigen wir dazu einen Refresh-Button an, in der mobilen Variante kommt ein "Pull-to-Refresh" zum Einsatz. Wenn der User also den am Screen seines Smartphones nach unten wischt, aktualisieren sich die Daten.
 
 Hättest Du gedacht, dass Quasar auch hier mit der passenden Komponente zur Stelle ist? Ja, hättest Du und Du hast Recht!
 
-Die Komponente nenn sich ... Trommelwirbel ... [Pull to Refresh](https://quasar-framework.org/components/pull-to-refresh.html). Das kam jetzt überraschend, nicht wahr?
+Die Komponente nennt sich ... Trommelwirbel ... [Pull to Refresh](https://quasar-framework.org/components/pull-to-refresh.html). Das kam jetzt überraschend, nicht wahr?
 
 Um diese Komponente verfügbar zu haben, müssen wir sie in der `quasar.config.js` eintragen. Der Bereich `components` sollte bei Dir jetzt also so aussehen:
 
