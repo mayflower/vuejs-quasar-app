@@ -2,7 +2,7 @@
 
 ## Ersetzen des Quasar-Logos mit einer Ausgabe der Geo-Koordinaten
 
-Die kopmlette App-Logik verbirgt sich im `src`-Verzeichnis. Dort finden wir unter `pages` einmal die Error404.vue page, die ausgeliefert wird, wenn unsere App versucht eine Ansicht anzuzeigen, die nicht gefunden werden kann. Danaben ist die **Index.vue** und die modifizieren wir jetzt.
+Die komplette App-Logik verbirgt sich im `src`-Verzeichnis. Dort finden wir unter `pages` einmal die Error404.vue page, die ausgeliefert wird, wenn unsere App versucht eine Ansicht anzuzeigen, die nicht gefunden werden kann. Danaben ist die **Index.vue** und die modifizieren wir jetzt.
 
 Wie jede VueJS-Komponente ist auch diese aufgeteilt in `<template>` (dem HTML-Teil), `<script>` (dem Logik-Teil) und `<style>` (dem CSS).
 Im `<template>`-Part ersetzen wir einfach das Bild durch folgenden Code:
