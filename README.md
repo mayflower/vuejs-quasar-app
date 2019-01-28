@@ -31,8 +31,7 @@ export default {
 
 ## Die Koordinaten dynamisch ermitteln
 
-Zugegeben, es ist noch nicht wirklich spannend, wenn unsere App 0 und 0 ausgibt. Um die Koordinaten dynamisch zu ermittlen verwenden wir einfach die native Javascript-Methode `navigator.geolocation.getCurrentPosition()`, die uns die aktuelle Position in einem Callbar zurückliefert.
-Dem muss der Benutzer aber erst zustimmen.
+Zugegeben, es ist noch nicht wirklich spannend, wenn unsere App 0 und 0 ausgibt. Um die Koordinaten dynamisch zu ermittlen verwenden wir die native Javascript-Methode `navigator.geolocation.getCurrentPosition()`, die uns die aktuelle Position in einem Callback zurückliefert. Dem muss der Benutzer aber erst zustimmen.
 
 ## Wann ermitteln wir die Position?
 
