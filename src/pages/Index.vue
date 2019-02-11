@@ -19,11 +19,11 @@
         <q-card-main>
           <div class="row justify-between">
             <div class="col">
-              <span class="q-body-1">Temperatur min:</span>
+              <span class="q-body-1">Temp. min:</span>
               <span class="q-body-2">{{ weather.main.temp_min | round }}°C</span>
             </div>
             <div class="col">
-              <span class="q-body-1">Temperatur max:</span>
+              <span class="q-body-1">Temp. max:</span>
               <span class="q-body-2">{{ weather.main.temp_max | round }}°C</span>
             </div>
             <div class="col">
