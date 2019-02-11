@@ -55,8 +55,6 @@ export default {
 Jetzt ist der Zeitpunkt, zu dem Axios zum Einsatz kommt und die Wetterdaten von OpenWeatherMap besorgt. Dazu habe ich im `<script>`-Part zunächst die axios-Library importiert und zwei Konstanten definiert. Zum einen den API-Key für OpenWeatherMap, zum anderen den API-Endpunkt für unsere Wetterdaten. Axios liefert eine [Promise](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise) zurück, in der sich die Daten befinden. Den API-Key solltest Du natürlich mit Deinem ersetzen:
 
 ``` javascript
-import axios from 'axios'
-
 const openWeatherMapApiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
 const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather'
 
