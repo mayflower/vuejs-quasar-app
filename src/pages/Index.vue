@@ -24,7 +24,7 @@ export default {
   created () {
     navigator.geolocation.getCurrentPosition(({coords}) => {
       const weatherUrl = `${openWeatherMapUrl}?units=metric&lat=${coords.latitude}&lon=${coords.longitude}&appid=${openWeatherMapApiKey}`
-      axios.get(weatherUrl).then(({data}) => {
+      this.$axios.get(weatherUrl).then(({data}) => {
         this.locality = data.name
         this.latitude = coords.latitude
         this.longitude = coords.longitude
