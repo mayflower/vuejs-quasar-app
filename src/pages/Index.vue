@@ -10,7 +10,7 @@
 </template>
 
 <script>
-const openWeatherMapApiKey = '70978937430be9d1a65977a0ba05784d'
+const openWeatherMapApiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather'
 
 export default {
