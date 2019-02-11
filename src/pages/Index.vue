@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 const openWeatherMapApiKey = '70978937430be9d1a65977a0ba05784d'
 const openWeatherMapUrl = 'https://api.openweathermap.org/data/2.5/weather'
 
